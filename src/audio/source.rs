@@ -101,9 +101,10 @@ impl AudioSource for CpalAudioSource {
                         .collect()
                 };
 
-                let _ = chunk_sender.send(mono_samples.clone());
                 let mut buffer = samples_for_callback.lock().unwrap();
                 buffer.extend_from_slice(&mono_samples);
+                drop(buffer);
+                let _ = chunk_sender.send(mono_samples);
             },
             |error| {
                 eprintln!("Audio capture stream error: {error}");

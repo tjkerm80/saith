@@ -261,13 +261,13 @@ impl LiveRecording {
 
         // Push-to-talk: skip silence trimming (user controls boundaries)
         // Toggle-to-talk: trim leading/trailing silence
-        let speech_samples = if self.is_push_to_talk {
-            &samples[..]
+        let (speech_samples, owns_buffer) = if self.is_push_to_talk {
+            (&samples[..], true)
         } else {
             let trimmed = voice_activity_detector.trim_silence(&samples);
             let trimmed_duration = trimmed.len() as f32 / TARGET_SAMPLE_RATE as f32;
             println!("  After silence trimming: {trimmed_duration:.1}s");
-            trimmed
+            (trimmed, false)
         };
 
         // Check if there's any speech at all
@@ -302,6 +302,9 @@ impl LiveRecording {
             let mut padded = speech_samples.to_vec();
             padded.resize(minimum_sample_count, 0.0);
             padded
+        } else if owns_buffer {
+            // Push-to-talk, no padding needed — consume the owned vec directly
+            samples
         } else {
             speech_samples.to_vec()
         };
