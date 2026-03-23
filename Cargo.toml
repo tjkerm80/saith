@@ -1,0 +1,56 @@
+[package]
+name = "saith"
+version = "0.0.1"
+edition = "2024"
+description = "A local, privacy-first speech-to-text dictation app for Linux"
+license = "MIT"
+
+[features]
+default = ["vulkan", "indicator"]
+indicator = ["dep:iced", "dep:tokio"]
+candle-backend = ["dep:candle-core", "dep:candle-nn", "dep:candle-transformers", "dep:tokenizers", "dep:byteorder"]
+whisper-rs-backend = ["dep:whisper-rs"]
+vulkan = ["whisper-rs-backend", "whisper-rs/vulkan"]
+
+[dependencies]
+# ML / Transcription (candle — optional, default)
+candle-core = { version = "0.9", optional = true }
+candle-nn = { version = "0.9", optional = true }
+candle-transformers = { version = "0.9", optional = true }
+tokenizers = { version = "0.22", optional = true }
+byteorder = { version = "1", optional = true }
+
+# ML / Transcription (whisper-rs — optional)
+whisper-rs = { version = "0.13", optional = true }
+
+# Model downloading
+hf-hub = "0.5"
+
+# Audio
+cpal = "0.17"
+rubato = "1.0"
+
+# Input simulation
+evdev = "0.13"
+
+# Concurrency
+crossbeam-channel = "0.5"
+
+# Config / Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# GUI indicator (optional)
+iced = { version = "0.14", optional = true, features = ["tokio", "canvas"] }
+tokio = { version = "1", optional = true }
+
+# Signal handling
+signal-hook = "0.3"
+
+# Utilities
+sha2 = "0.10"
+dirs = "5"
+anyhow = "1"
+
+[dev-dependencies]
+tempfile = "3.27.0"

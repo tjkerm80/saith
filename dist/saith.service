@@ -1,0 +1,15 @@
+[Unit]
+Description=Saith — local speech-to-text dictation
+Documentation=https://github.com/tkermicle/saith
+ConditionEnvironment=WAYLAND_DISPLAY
+After=graphical-session.target
+Requires=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.cargo/bin/saith
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target
