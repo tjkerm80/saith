@@ -21,7 +21,7 @@ tokenizers = { version = "0.22", optional = true }
 byteorder = { version = "1", optional = true }
 
 # ML / Transcription (whisper-rs — optional)
-whisper-rs = { version = "0.13", optional = true }
+whisper-rs = { version = "0.16", optional = true }
 
 # Model downloading
 hf-hub = "0.5"
@@ -45,11 +45,11 @@ iced = { version = "0.14", optional = true, features = ["tokio", "canvas"] }
 tokio = { version = "1", optional = true }
 
 # Signal handling
-signal-hook = "0.3"
+signal-hook = "0.4"
 
 # Utilities
 sha2 = "0.10"
-dirs = "5"
+dirs = "6"
 anyhow = "1"
 
 [dev-dependencies]

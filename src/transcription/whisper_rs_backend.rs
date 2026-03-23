@@ -60,16 +60,17 @@ impl WhisperRsTranscriber {
             .full(parameters, audio_samples)
             .map_err(|error| anyhow::anyhow!("Whisper transcription failed: {error}"))?;
 
-        let segment_count = state
-            .full_n_segments()
-            .map_err(|error| anyhow::anyhow!("Failed to get segment count: {error}"))?;
+        let segment_count = state.full_n_segments();
 
         let mut transcription = String::new();
         for index in 0..segment_count {
-            let segment_text = state
-                .full_get_segment_text(index)
+            let segment = state
+                .get_segment(index)
+                .ok_or_else(|| anyhow::anyhow!("Failed to get segment {index}"))?;
+            let segment_text = segment
+                .to_str()
                 .map_err(|error| anyhow::anyhow!("Failed to get segment {index} text: {error}"))?;
-            transcription.push_str(&segment_text);
+            transcription.push_str(segment_text);
         }
 
         Ok(transcription.trim().to_string())
